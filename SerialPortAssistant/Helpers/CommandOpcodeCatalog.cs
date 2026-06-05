@@ -34,6 +34,12 @@ public static class CommandOpcodeCatalog
     if (settings.LastCommandWireFormat == CommandWireFormat.Auto)
       settings.LastCommandWireFormat = CommandWireFormat.Text;
 
+    foreach (var op in settings.CommandOpcodes)
+    {
+      if (!string.IsNullOrWhiteSpace(op.DefaultPayloadHex))
+        op.DefaultPayloadHex = NormalizePayloadDisplay(op.DefaultPayloadHex);
+    }
+
     var cmdPrefix = settings.Prefixes.Cmd ?? string.Empty;
     if (string.IsNullOrWhiteSpace(cmdPrefix) ||
         cmdPrefix.StartsWith("CMD", StringComparison.OrdinalIgnoreCase))
@@ -108,10 +114,10 @@ public static class CommandOpcodeCatalog
     if (!string.IsNullOrWhiteSpace(definition.DefaultPayloadHex))
       return NormalizePayloadDisplay(definition.DefaultPayloadHex.Trim());
 
-    return OpcodeFormat.Format(definition.Opcode);
+    return HexPayloadFormat.FormatPayload(definition.Opcode, default);
   }
 
-  /// <summary>将 payload 首字节规范为 0x 前缀显示。</summary>
+  /// <summary>将 payload 规范为空格分隔 HEX（无 0x 前缀）。</summary>
   public static string NormalizePayloadDisplay(string payloadHex)
   {
     if (string.IsNullOrWhiteSpace(payloadHex))

@@ -54,7 +54,7 @@ public sealed class CommandOpcodeCatalogTests
       0x12, "新命令", "NEW_CMD", "11 0A", []);
 
     Assert.True(result.Success);
-    Assert.Equal("0x12 0A", result.Definition!.DefaultPayloadHex);
+    Assert.Equal("12 0A", result.Definition!.DefaultPayloadHex);
   }
 
   [Fact]

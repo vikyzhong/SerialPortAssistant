@@ -91,11 +91,10 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Background" Value="#FAFAFA"/>
         </Style>
-        <Style x:Key="CmdHexPreviewStyle" TargetType="TextBox">
+        <Style x:Key="CmdHexInputStyle" TargetType="TextBox">
             <Setter Property="FontFamily" Value="Consolas"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Padding" Value="6,4"/>
-            <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="MinHeight" Value="40"/>
@@ -106,6 +105,7 @@
             <Setter Property="BorderBrush" Value="#CCC"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
+        <Style x:Key="CmdHexPreviewStyle" TargetType="TextBox" BasedOn="{StaticResource CmdHexInputStyle}"/>
     </Window.Resources>
 
     <DockPanel>
@@ -418,7 +418,7 @@
                                 <TextBox Grid.Row="0" Grid.Column="1"
                                          Text="{Binding Commands.TextBody, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource CmdInputTextBoxStyle}"/>
-                                <RadioButton Grid.Row="0" Grid.Column="2" Content="用此格式发送"
+                                <RadioButton Grid.Row="0" Grid.Column="2" Content="字符串发送"
                                              Style="{StaticResource CmdWireRadioStyle}"
                                              IsChecked="{Binding Commands.IsTextWire}"
                                              GroupName="CmdWireFormat"/>
@@ -427,8 +427,8 @@
                                 <TextBox Grid.Row="2" Grid.Column="1"
                                          Text="{Binding Commands.PayloadHex, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource CmdInputTextBoxStyle}"
-                                         ToolTip="Opcode + 参数字节，如 0x02 或 0x04 C2 00"/>
-                                <RadioButton Grid.Row="2" Grid.Column="2" Content="用此格式发送"
+                                         ToolTip="Opcode + 参数字节；可输入 020A、0x02 0x0A 等，自动按字节加空格"/>
+                                <RadioButton Grid.Row="2" Grid.Column="2" Content="HEX格式发送"
                                              Style="{StaticResource CmdWireRadioStyle}"
                                              IsChecked="{Binding Commands.IsBinaryWire}"
                                              GroupName="CmdWireFormat"/>
@@ -454,8 +454,8 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBox Text="{Binding Commands.SendContentHex, UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="{Binding Commands.IsSendContentReadOnly}"
-                                     Style="{StaticResource CmdHexPreviewStyle}"/>
+                                     Style="{StaticResource CmdHexPreviewStyle}"
+                                     ToolTip="可直接编辑 HEX；修改后将按原样字节发送"/>
                             <Button Grid.Column="1" Content="发送" Command="{Binding Commands.SendCommand}"
                                     Padding="16,6" Margin="8,0,0,0" MinWidth="72" FontWeight="SemiBold"
                                     VerticalAlignment="Top"/>

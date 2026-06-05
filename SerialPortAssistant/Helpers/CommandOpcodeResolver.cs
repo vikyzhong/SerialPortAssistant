@@ -32,11 +32,6 @@ public static class CommandOpcodeResolver
     return $"{OpcodeFormat.Format(opcode)} {name}";
   }
 
-  public static string FormatPayloadHex(byte opcode, ReadOnlySpan<byte> args)
-  {
-    if (args.Length == 0)
-      return OpcodeFormat.Format(opcode);
-
-    return OpcodeFormat.Format(opcode) + " " + TrafficFormatter.FormatHex(args.ToArray());
-  }
+  public static string FormatPayloadHex(byte opcode, ReadOnlySpan<byte> args) =>
+    HexPayloadFormat.FormatPayload(opcode, args);
 }

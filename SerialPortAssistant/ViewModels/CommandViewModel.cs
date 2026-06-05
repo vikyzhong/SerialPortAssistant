@@ -48,6 +48,8 @@ public sealed class CommandViewModel : ViewModelBase
 
   private bool _suppressEditableSync;
 
+  private bool _suppressSendContentSync;
+
   private bool _useRawSendContent;
 
   private bool _suppressHistorySelection;
@@ -87,10 +89,6 @@ public sealed class CommandViewModel : ViewModelBase
     }
 
   }
-
-
-
-  public bool IsSendContentReadOnly => !_useRawSendContent;
 
 
 
@@ -162,8 +160,6 @@ public sealed class CommandViewModel : ViewModelBase
 
       _useRawSendContent = false;
 
-      OnPropertyChanged(nameof(IsSendContentReadOnly));
-
       RecomposeDraft();
 
     }
@@ -182,7 +178,9 @@ public sealed class CommandViewModel : ViewModelBase
 
     {
 
-      if (!SetProperty(ref _payloadHex, value) || _suppressEditableSync)
+      var incoming = HexPayloadFormat.FormatInputLive(value);
+
+      if (!SetProperty(ref _payloadHex, incoming) || _suppressEditableSync)
 
         return;
 
@@ -190,9 +188,9 @@ public sealed class CommandViewModel : ViewModelBase
 
       _useRawSendContent = false;
 
-      OnPropertyChanged(nameof(IsSendContentReadOnly));
-
-      RecomposeDraft();
+      // 半字节输入中（如先敲 "1" 再敲 "2"）不触发 Compose 回写，避免 "1" 被当成 0x01。
+      if (!HexPayloadFormat.HasIncompleteTrailingNibble(incoming))
+        RecomposeDraft();
 
     }
 
@@ -229,8 +227,6 @@ public sealed class CommandViewModel : ViewModelBase
 
 
       _useRawSendContent = false;
-
-      OnPropertyChanged(nameof(IsSendContentReadOnly));
 
       OnPropertyChanged(nameof(IsTextWire));
 
@@ -284,9 +280,11 @@ public sealed class CommandViewModel : ViewModelBase
 
         return;
 
-      if (_useRawSendContent)
+      if (_suppressSendContentSync)
 
-        StatusText = "发送格式: 原样 · 发送内容框（可编辑）";
+        return;
+
+      EnterRawSendMode();
 
     }
 
@@ -446,9 +444,11 @@ public sealed class CommandViewModel : ViewModelBase
 
 
 
-  private void RefreshSendHistory()
+  private void RefreshSendHistory(SentCommandHistoryItem? selectItem = null)
 
   {
+
+    var previous = _selectedHistoryItem;
 
     _suppressHistorySelection = true;
 
@@ -458,7 +458,21 @@ public sealed class CommandViewModel : ViewModelBase
 
       SendHistory.Add(item);
 
-    SelectedHistoryItem = null;
+    SentCommandHistoryItem? next = null;
+
+    if (selectItem != null)
+
+      next = SendHistory.FirstOrDefault(h => h.Matches(selectItem));
+
+    else if (previous != null)
+
+      next = SendHistory.FirstOrDefault(h => h.Matches(previous));
+
+    if (next == null && SendHistory.Count > 0)
+
+      next = SendHistory[0];
+
+    SelectedHistoryItem = next;
 
     _suppressHistorySelection = false;
 
@@ -532,8 +546,6 @@ public sealed class CommandViewModel : ViewModelBase
 
     }
 
-    OnPropertyChanged(nameof(IsSendContentReadOnly));
-
   }
 
 
@@ -556,7 +568,7 @@ public sealed class CommandViewModel : ViewModelBase
 
     _settingsService.Save(settings);
 
-    RefreshSendHistory();
+    RefreshSendHistory(entry);
 
   }
 
@@ -576,8 +588,6 @@ public sealed class CommandViewModel : ViewModelBase
 
     _suppressEditableSync = false;
 
-    OnPropertyChanged(nameof(IsSendContentReadOnly));
-
     RecomposeDraft();
 
   }
@@ -593,6 +603,12 @@ public sealed class CommandViewModel : ViewModelBase
     {
 
       _draft = CommandComposer.Compose(TextBody, PayloadHex, _settingsService.Current);
+
+      // 弱联动：Compose 会按码表补全另一侧（AT+↔CMD），需写回编辑框；历史命令只存单侧时靠此还原。
+      _suppressEditableSync = true;
+      TextBody = _draft.TextBody;
+      PayloadHex = _draft.PayloadHex;
+      _suppressEditableSync = false;
 
       BinaryFrameSizeLabel = _draft.BinaryByteCount > 0
 
@@ -612,11 +628,29 @@ public sealed class CommandViewModel : ViewModelBase
 
       BinaryFrameSizeLabel = string.Empty;
 
+      _suppressSendContentSync = true;
+
       SendContentHex = string.Empty;
+
+      _suppressSendContentSync = false;
 
       StatusText = ex.Message;
 
     }
+
+  }
+
+
+
+  private void EnterRawSendMode()
+
+  {
+
+    _useRawSendContent = true;
+
+    _draft = null;
+
+    StatusText = "发送格式: 原样 · 发送内容框（可编辑）";
 
   }
 
@@ -631,6 +665,8 @@ public sealed class CommandViewModel : ViewModelBase
       return;
 
 
+
+    _suppressSendContentSync = true;
 
     if (WireFormat == CommandWireFormat.Binary)
 
@@ -651,6 +687,8 @@ public sealed class CommandViewModel : ViewModelBase
       StatusText = $"发送格式: 文本 · {_draft.ResolvedHint}";
 
     }
+
+    _suppressSendContentSync = false;
 
   }
 

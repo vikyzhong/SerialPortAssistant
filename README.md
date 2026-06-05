@@ -1,4 +1,4 @@
-# 串口助手 (Serial Port Assistant) **V0.01**
+# 串口助手 (Serial Port Assistant) **V0.02**
 
 Windows WPF 串口助手，支持最高 **1,000,000** 波特率。
 
