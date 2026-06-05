@@ -50,7 +50,7 @@ GitHub [Releases](https://github.com/vikyzhong/SerialPortAssistant/releases) 提
 .\scripts\publish-framework-dependent.ps1
 ```
 
-输出目录：`publish\releases\`。若需自带运行时的单文件包（约 70MB），使用发布配置 `Win10-Standalone`（不随仓库上传）。
+输出目录：`publish\releases\`。曲线使用 **WPF 自绘**（已移除 ScottPlot），发布包明显更小。若需自带运行时的单文件包（约 70MB），使用发布配置 `Win10-Standalone`（不推荐作默认分发）。
 
 ## 构建与运行
 

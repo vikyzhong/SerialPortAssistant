@@ -1,7 +1,7 @@
 <Window x:Class="SerialPortAssistant.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:scott="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
+        xmlns:views="clr-namespace:SerialPortAssistant.Views"
         xmlns:helpers="clr-namespace:SerialPortAssistant.Helpers"
         Title="串口助手"
         Height="820"
@@ -273,7 +273,7 @@
                                 <RotateTransform Angle="-90"/>
                             </TextBlock.LayoutTransform>
                         </TextBlock>
-                        <scott:WpfPlot x:Name="DataPlot" Grid.Column="1"/>
+                        <views:LightweightChartControl x:Name="DataChart" Grid.Column="1"/>
                     </Grid>
                     <TextBlock x:Name="PlotXAxisLabel" Grid.Row="2"
                                Text="X轴"
