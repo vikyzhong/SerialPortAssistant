@@ -1,4 +1,5 @@
 using System.Windows;
+using SerialPortSimulator.Helpers;
 
 namespace SerialPortSimulator;
 
@@ -9,6 +10,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        Title = AppVersion.WindowTitle("串口助手 — 下位机模拟器");
         DataContext = _viewModel;
     }
 

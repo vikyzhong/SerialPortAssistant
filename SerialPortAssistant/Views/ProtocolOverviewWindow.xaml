@@ -411,7 +411,7 @@
                         下位机 →  DATA:16384,16402,16390
                         下位机 →  LOG:1IMU started
                         主机   →  AT+GMR
-                        下位机 →  AT version:1.0.0（RAW）
+                        下位机 →  AT version:V0.01（RAW）
                         下位机 →  OK
                         主机   →  CMD 43 4D 44 01 01 0A
                         下位机 →  ACK 41 43 4B 02 01 00 0A

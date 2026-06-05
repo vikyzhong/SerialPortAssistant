@@ -25,6 +25,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        Title = AppVersion.WindowTitle("串口助手");
         _viewModel = new MainViewModel();
         DataContext = _viewModel;
 

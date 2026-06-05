@@ -116,8 +116,8 @@ public sealed class CmdResponder
             CommandKeyword = "GMR",
             UrcLines =
             [
-                "AT version:1.0.0(SerialPortSimulator)",
-                "SDK version:v1.0.0-sim",
+                "AT version:V0.01(SerialPortSimulator)",
+                "SDK version:V0.01-sim",
                 "compile time:Jun  2 2026 12:00:00"
             ],
             AckResponse = "OK",

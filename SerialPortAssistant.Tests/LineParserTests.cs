@@ -65,7 +65,7 @@ public class LineParserTests
     [Fact]
     public void Parse_VersionLine_ReturnsAck()
     {
-        var result = CreateParser().Parse("SerialPortSimulator v1.0.0-sim");
+        var result = CreateParser().Parse("SerialPortSimulator V0.01-sim");
         Assert.Equal(LineKind.Raw, result.Kind);
     }
 

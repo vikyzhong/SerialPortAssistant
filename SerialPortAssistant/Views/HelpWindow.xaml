@@ -313,7 +313,7 @@
                 <Border Style="{StaticResource HelpCaseBorder}" Background="#E8F5E9">
                     <StackPanel>
                         <TextBlock Text="【案例 A】读版本 — 下位机回复" Style="{StaticResource HelpCaseTitle}"/>
-                        <TextBlock Style="{StaticResource HelpMonoLine}" Text="文本：SerialPortSimulator v1.0.0-sim"/>
+                        <TextBlock Style="{StaticResource HelpMonoLine}" Text="文本：SerialPortSimulator V0.01-sim"/>
                         <TextBlock Style="{StaticResource HelpMonoLine}" Text="文本：OK"/>
                     </StackPanel>
                 </Border>
@@ -372,7 +372,7 @@
                 <Border Style="{StaticResource HelpCaseBorder}" Background="#F5F5F5" Margin="0,0,0,14">
                     <StackPanel>
                         <TextBlock Text="步骤 ⑤ 下位机回版本 + OK" Style="{StaticResource HelpCaseTitle}"/>
-                        <TextBlock Style="{StaticResource HelpMonoLine}" Text="文本：SerialPortSimulator v1.0.0-sim"/>
+                        <TextBlock Style="{StaticResource HelpMonoLine}" Text="文本：SerialPortSimulator V0.01-sim"/>
                         <TextBlock Style="{StaticResource HelpMonoLine}" Text="文本：OK"/>
                     </StackPanel>
                 </Border>

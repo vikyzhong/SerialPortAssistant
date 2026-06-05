@@ -1,8 +1,8 @@
 # 将 publish\releases\ 下的框架依赖 ZIP 上传到 GitHub Releases（需已安装并登录 gh）
-# 用法：.\scripts\upload-github-release.ps1 -Tag v1.0.0
+# 用法：.\scripts\upload-github-release.ps1 -Tag v0.01
 param(
-    [string]$Tag = "v1.0.0",
-    [string]$Title = "v1.0.0 — 框架依赖版 (win-x64)"
+    [string]$Tag = "v0.01",
+    [string]$Title = "V0.01 — 框架依赖版 (win-x64)"
 )
 
 $ErrorActionPreference = "Stop"

@@ -1,7 +1,7 @@
 using System.Diagnostics;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Navigation;
+using SerialPortAssistant.Helpers;
 
 namespace SerialPortAssistant.Views;
 
@@ -10,8 +10,7 @@ public partial class AboutWindow : Window
     public AboutWindow()
     {
         InitializeComponent();
-        var version = Assembly.GetExecutingAssembly().GetName().Version;
-        VersionText.Text = version != null ? $"版本 {version.Major}.{version.Minor}.{version.Build}" : string.Empty;
+        VersionText.Text = AppVersion.AboutLine();
     }
 
     private void EmailLink_RequestNavigate(object sender, RequestNavigateEventArgs e)
