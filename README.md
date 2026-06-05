@@ -33,6 +33,25 @@ Windows WPF 串口助手，支持最高 **1,000,000** 波特率。
 
 通道名称（默认 X/Y/Z）可在 **配置 → 数据通道** 中修改。
 
+## 下载运行（Release）
+
+GitHub [Releases](https://github.com/vikyzhong/SerialPortAssistant/releases) 提供 **框架依赖** 版（体积小，**不包含** .NET 运行时）：
+
+| 文件 | 说明 |
+|------|------|
+| `SerialPortAssistant-win-x64-fd.zip` | 串口助手 |
+| `SerialPortSimulator-win-x64-fd.zip` | 下位机模拟器 |
+
+**使用前请安装 [.NET 8 桌面运行时](https://dotnet.microsoft.com/download/dotnet/8.0)**（Windows x64，Desktop Runtime）。解压 ZIP 后运行其中的 `.exe` 即可。
+
+自行打包框架依赖版：
+
+```powershell
+.\scripts\publish-framework-dependent.ps1
+```
+
+输出目录：`publish\releases\`。若需自带运行时的单文件包（约 70MB），使用发布配置 `Win10-Standalone`（不随仓库上传）。
+
 ## 构建与运行
 
 ```powershell
