@@ -1,0 +1,13 @@
+bin/
+obj/
+.vs/
+.cursor/
+publish/
+*.user
+*.suo
+*.cache
+*.dll
+*.pdb
+*.exe
+[Dd]ebug/
+[Rr]elease/

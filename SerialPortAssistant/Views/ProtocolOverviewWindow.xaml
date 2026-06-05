@@ -1,0 +1,427 @@
+<Window x:Class="SerialPortAssistant.Views.ProtocolOverviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="协议总览 - 串口助手"
+        Height="820"
+        Width="900"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize">
+    <Window.Resources>
+        <Style x:Key="OverviewBodyText" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="LineHeight" Value="24"/>
+            <Setter Property="Foreground" Value="#444"/>
+        </Style>
+        <Style x:Key="OverviewSectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,14,0,8"/>
+        </Style>
+        <Style x:Key="OverviewSubTitle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,8,0,6"/>
+        </Style>
+        <Style x:Key="OverviewCaseBorder" TargetType="Border">
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+        <Style x:Key="OverviewMono" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="LineHeight" Value="22"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel Margin="14">
+        <Button DockPanel.Dock="Bottom" Content="关闭" IsDefault="True" Click="Close_Click"
+                HorizontalAlignment="Right" Padding="20,8" Margin="0,12,0,0" FontSize="13"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="串口多通道协议总览" FontSize="22" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock Style="{StaticResource OverviewBodyText}" Margin="0,0,0,12">
+                    同一串口字节流上按前缀/帧类型分流。AT+ 文本命令默认 CRLF 行尾；DATA / LOG / CMD / ACK / DATB 等帧以 LF（0x0A）结尾。前缀与 AT+ 行尾可在「设置 → 协议与日志配置」修改（下列为默认值）。
+                </TextBlock>
+
+                <TextBlock Text="一、通道一览" Style="{StaticResource OverviewSectionTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#F5F5F5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="72"/>
+                            <ColumnDefinition Width="108"/>
+                            <ColumnDefinition Width="56"/>
+                            <ColumnDefinition Width="88"/>
+                            <ColumnDefinition Width="72"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="SemiBold" Margin="0,0,6,6" Text="通道"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" Margin="0,0,6,6" Text="方向"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" FontWeight="SemiBold" Margin="0,0,6,6" Text="类型"/>
+                        <TextBlock Grid.Row="0" Grid.Column="3" FontWeight="SemiBold" Margin="0,0,6,6" Text="判头"/>
+                        <TextBlock Grid.Row="0" Grid.Column="4" FontWeight="SemiBold" Margin="0,0,6,6" Text="帧尾"/>
+                        <TextBlock Grid.Row="0" Grid.Column="5" FontWeight="SemiBold" Margin="0,0,0,6" Text="助手行为"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="AT+"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="12.5" Margin="0,0,6,4" Text="主机→下位机"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" FontSize="12.5" Margin="0,0,6,4" Text="文本"/>
+                        <TextBlock Grid.Row="1" Grid.Column="3" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="AT+ (3B)"/>
+                        <TextBlock Grid.Row="1" Grid.Column="4" FontSize="12.5" Margin="0,0,6,4" Text="CRLF*"/>
+                        <TextBlock Grid.Row="1" Grid.Column="5" FontSize="12.5" TextWrapping="Wrap" Margin="0,0,0,4" Text="命令发送区"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="12.5" Margin="0,0,6,4" Text="AT 回传"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="12.5" Margin="0,0,6,4" Text="下位机→主机"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" FontSize="12.5" Margin="0,0,6,4" Text="文本"/>
+                        <TextBlock Grid.Row="2" Grid.Column="3" FontSize="12.5" Margin="0,0,6,4" Text="无固定头"/>
+                        <TextBlock Grid.Row="2" Grid.Column="4" FontSize="12.5" Margin="0,0,6,4" Text="LF/CRLF"/>
+                        <TextBlock Grid.Row="2" Grid.Column="5" FontSize="12.5" TextWrapping="Wrap" Margin="0,0,0,4" Text="命令回传区"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="CMD"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="12.5" Margin="0,0,6,4" Text="主机→下位机"/>
+                        <TextBlock Grid.Row="3" Grid.Column="2" FontSize="12.5" Margin="0,0,6,4" Text="二进制"/>
+                        <TextBlock Grid.Row="3" Grid.Column="3" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="CMD (3B)"/>
+                        <TextBlock Grid.Row="3" Grid.Column="4" FontSize="12.5" Margin="0,0,6,4" Text="LF"/>
+                        <TextBlock Grid.Row="3" Grid.Column="5" FontSize="12.5" TextWrapping="Wrap" Margin="0,0,0,4" Text="命令发送（二进制）"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="ACK"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" FontSize="12.5" Margin="0,0,6,4" Text="下位机→主机"/>
+                        <TextBlock Grid.Row="4" Grid.Column="2" FontSize="12.5" Margin="0,0,6,4" Text="二进制"/>
+                        <TextBlock Grid.Row="4" Grid.Column="3" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="ACK (3B)"/>
+                        <TextBlock Grid.Row="4" Grid.Column="4" FontSize="12.5" Margin="0,0,6,4" Text="LF"/>
+                        <TextBlock Grid.Row="4" Grid.Column="5" FontSize="12.5" TextWrapping="Wrap" Margin="0,0,0,4" Text="命令回传区"/>
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="DATA:"/>
+                        <TextBlock Grid.Row="5" Grid.Column="1" FontSize="12.5" Margin="0,0,6,4" Text="下位机→主机"/>
+                        <TextBlock Grid.Row="5" Grid.Column="2" FontSize="12.5" Margin="0,0,6,4" Text="文本"/>
+                        <TextBlock Grid.Row="5" Grid.Column="3" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="DATA: (5B)"/>
+                        <TextBlock Grid.Row="5" Grid.Column="4" FontSize="12.5" Margin="0,0,6,4" Text="LF"/>
+                        <TextBlock Grid.Row="5" Grid.Column="5" FontSize="12.5" TextWrapping="Wrap" Margin="0,0,0,4" Text="实时曲线"/>
+
+                        <TextBlock Grid.Row="6" Grid.Column="0" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="DATB:"/>
+                        <TextBlock Grid.Row="6" Grid.Column="1" FontSize="12.5" Margin="0,0,6,4" Text="下位机→主机"/>
+                        <TextBlock Grid.Row="6" Grid.Column="2" FontSize="12.5" Margin="0,0,6,4" Text="二进制"/>
+                        <TextBlock Grid.Row="6" Grid.Column="3" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="DATB: (5B)"/>
+                        <TextBlock Grid.Row="6" Grid.Column="4" FontSize="12.5" Margin="0,0,6,4" Text="LF"/>
+                        <TextBlock Grid.Row="6" Grid.Column="5" FontSize="12.5" TextWrapping="Wrap" Margin="0,0,0,4" Text="实时曲线（高速）"/>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="LOG:"/>
+                        <TextBlock Grid.Row="7" Grid.Column="1" FontSize="12.5" Margin="0,0,6,4" Text="下位机→主机"/>
+                        <TextBlock Grid.Row="7" Grid.Column="2" FontSize="12.5" Margin="0,0,6,4" Text="文本"/>
+                        <TextBlock Grid.Row="7" Grid.Column="3" FontFamily="Consolas" FontSize="12.5" Margin="0,0,6,4" Text="LOG: (4B)"/>
+                        <TextBlock Grid.Row="7" Grid.Column="4" FontSize="12.5" Margin="0,0,6,4" Text="LF"/>
+                        <TextBlock Grid.Row="7" Grid.Column="5" FontSize="12.5" TextWrapping="Wrap" Margin="0,0,0,4" Text="日志面板"/>
+
+                        <TextBlock Grid.Row="8" Grid.Column="0" FontSize="12.5" Margin="0,0,6,0" Text="RAW"/>
+                        <TextBlock Grid.Row="8" Grid.Column="1" FontSize="12.5" Margin="0,0,6,0" Text="下位机→主机"/>
+                        <TextBlock Grid.Row="8" Grid.Column="2" FontSize="12.5" Margin="0,0,6,0" Text="未识别"/>
+                        <TextBlock Grid.Row="8" Grid.Column="3" FontSize="12.5" Margin="0,0,6,0" Text="—"/>
+                        <TextBlock Grid.Row="8" Grid.Column="4" FontSize="12.5" Margin="0,0,6,0" Text="—"/>
+                        <TextBlock Grid.Row="8" Grid.Column="5" FontSize="12.5" TextWrapping="Wrap" Text="可选显示 / 串口监控"/>
+                    </Grid>
+                </Border>
+                <TextBlock Style="{StaticResource OverviewBodyText}" FontSize="12" Margin="0,0,0,8" Foreground="#666">
+                    * AT+ 行尾默认 CRLF，可在设置中改为 LF。
+                </TextBlock>
+
+                <TextBlock Text="二、判头 HEX 对照（默认）" Style="{StaticResource OverviewSectionTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#EEEEEE">
+                    <TextBlock Style="{StaticResource OverviewMono}">
+                        DATA: → 44 41 54 41 3A    DATB: → 44 41 54 42 3A    LOG: → 4C 4F 47 3A
+                        AT+  → 41 54 2B    CMD → 43 4D 44    ACK → 41 43 4B
+                        LF → 0A    CRLF → 0D 0A
+                        命令类前缀 CMD / ACK / AT+ 均为 3 字节，便于下位机统一判头。
+                    </TextBlock>
+                </Border>
+
+                <TextBlock Text="三、各通道帧结构" Style="{StaticResource OverviewSectionTitle}"/>
+
+                <TextBlock Text="1. AT+ 文本命令（主机 → 下位机）" Style="{StaticResource OverviewSubTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#E8F5E9">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource OverviewMono}" Text="格式：AT+ + 命令正文 + 行尾（默认 CRLF）"/>
+                        <TextBlock Style="{StaticResource OverviewMono}" Margin="0,4,0,0" Text="编码：UTF-8；正文为命令码表「文本别名」，不含 AT+ 前缀"/>
+                        <TextBlock Style="{StaticResource OverviewMono}" Margin="0,4,0,0" Text="示例：AT+GMR → HEX TX：41 54 2B 47 4D 52 0D 0A"/>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="默认 14 条 AT+ 命令" FontWeight="SemiBold" FontSize="12.5" Margin="0,0,0,6"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#F1F8E9">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="56"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="SemiBold" Margin="0,0,8,4" Text="Opcode"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" Margin="0,0,8,4" Text="别名"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" FontWeight="SemiBold" Margin="0,0,0,4" Text="发送示例"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x01"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="RST"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+RST"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x02"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="GMR"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+GMR"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x03"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="RESTORE"/>
+                        <TextBlock Grid.Row="3" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+RESTORE"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x04"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="GSLP"/>
+                        <TextBlock Grid.Row="4" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+GSLP"/>
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x05"/>
+                        <TextBlock Grid.Row="5" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="ECHO"/>
+                        <TextBlock Grid.Row="5" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+ECHO"/>
+
+                        <TextBlock Grid.Row="6" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x06"/>
+                        <TextBlock Grid.Row="6" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="UART_CUR?"/>
+                        <TextBlock Grid.Row="6" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+UART_CUR?"/>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x07"/>
+                        <TextBlock Grid.Row="7" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="CWMODE?"/>
+                        <TextBlock Grid.Row="7" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+CWMODE?"/>
+
+                        <TextBlock Grid.Row="8" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x08"/>
+                        <TextBlock Grid.Row="8" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="CWLAP"/>
+                        <TextBlock Grid.Row="8" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+CWLAP"/>
+
+                        <TextBlock Grid.Row="9" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x09"/>
+                        <TextBlock Grid.Row="9" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="CWJAP?"/>
+                        <TextBlock Grid.Row="9" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+CWJAP?"/>
+
+                        <TextBlock Grid.Row="10" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x0A"/>
+                        <TextBlock Grid.Row="10" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="PING"/>
+                        <TextBlock Grid.Row="10" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+PING"/>
+
+                        <TextBlock Grid.Row="11" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x0B"/>
+                        <TextBlock Grid.Row="11" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="CIPSTATUS"/>
+                        <TextBlock Grid.Row="11" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+CIPSTATUS"/>
+
+                        <TextBlock Grid.Row="12" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x0C"/>
+                        <TextBlock Grid.Row="12" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="SAVE"/>
+                        <TextBlock Grid.Row="12" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+SAVE"/>
+
+                        <TextBlock Grid.Row="13" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="0x0D"/>
+                        <TextBlock Grid.Row="13" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,2" Text="ATE0"/>
+                        <TextBlock Grid.Row="13" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+ATE0"/>
+
+                        <TextBlock Grid.Row="14" Grid.Column="0" FontFamily="Consolas" FontSize="12" Margin="0,0,8,0" Text="0x0E"/>
+                        <TextBlock Grid.Row="14" Grid.Column="1" FontFamily="Consolas" FontSize="12" Margin="0,0,8,0" Text="ATE1"/>
+                        <TextBlock Grid.Row="14" Grid.Column="2" FontFamily="Consolas" FontSize="12" Text="AT+ATE1"/>
+                    </Grid>
+                </Border>
+
+                <TextBlock Text="2. AT 文本回传（下位机 → 主机）" Style="{StaticResource OverviewSubTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#FFF8E1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="SemiBold" Margin="0,0,8,4" Text="类型"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" Margin="0,0,8,4" Text="格式"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" FontWeight="SemiBold" Margin="0,0,0,4" Text="助手分类"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" FontSize="12.5" Margin="0,0,8,4" Text="成功"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontFamily="Consolas" FontSize="12.5" Margin="0,0,8,4" Text="OK 或 OK + 详情"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" FontSize="12.5" Margin="0,0,0,4" Text="回传区"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="12.5" Margin="0,0,8,4" Text="失败"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontFamily="Consolas" FontSize="12.5" Margin="0,0,8,4" Text="ERROR / ERR"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" FontSize="12.5" Margin="0,0,0,4" Text="回传区"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" FontSize="12.5" Margin="0,0,8,4" Text="URC"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" FontFamily="Consolas" FontSize="12.5" Margin="0,0,8,4" Text="+名称:值（如 +CWMODE:1）"/>
+                        <TextBlock Grid.Row="3" Grid.Column="2" FontSize="12.5" Margin="0,0,0,4" Text="回传区"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" FontSize="12.5" Margin="0,0,8,0" Text="其它"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" FontFamily="Consolas" FontSize="12.5" Margin="0,0,8,0" Text="普通文本行（如版本正文）"/>
+                        <TextBlock Grid.Row="4" Grid.Column="2" FontSize="12.5" Text="RAW"/>
+                    </Grid>
+                </Border>
+
+                <TextBlock Text="3. CMD 二进制命令（主机 → 下位机）" Style="{StaticResource OverviewSubTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#E3F2FD">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource OverviewMono}" Text="CMD(3) + len(1~16) + payload(len) + LF"/>
+                        <TextBlock Style="{StaticResource OverviewMono}" Margin="0,4,0,0" Text="payload[0] = opcode，其余为参数"/>
+                        <TextBlock Style="{StaticResource OverviewMono}" Margin="0,4,0,0" Text="复位示例：43 4D 44 01 01 0A（opcode=0x01）"/>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="4. ACK 二进制回传（下位机 → 主机）" Style="{StaticResource OverviewSubTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#E3F2FD">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource OverviewMono}" Text="ACK(3) + len(2~16) + payload(len) + LF"/>
+                        <TextBlock Style="{StaticResource OverviewMono}" Margin="0,4,0,0" Text="payload[0]=opcode，payload[1]=status（0x00=OK，0x01=ERR），可带附加数据"/>
+                        <TextBlock Style="{StaticResource OverviewMono}" Margin="0,4,0,0" Text="GMR 成功示例：41 43 4B 02 02 00 0A"/>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="5. DATA: 文本数据（下位机 → 主机）" Style="{StaticResource OverviewSubTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#E3F2FD">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource OverviewMono}" Text="DATA: + 1~3 路 uint16（ASCII 十进制或 0x 十六进制，逗号/空格分隔）+ LF"/>
+                        <TextBlock Style="{StaticResource OverviewMono}" Margin="0,4,0,0" Text="范围 0~65535；示例：DATA:1000,2000,3000"/>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="6. DATB: 二进制数据（下位机 → 主机）" Style="{StaticResource OverviewSubTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#E8F5E9">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource OverviewMono}" Text="DATB:(5) + count(1~3) + count×uint16 大端 + LF"/>
+                        <TextBlock Style="{StaticResource OverviewMono}" Margin="0,4,0,0" Text="三通道示例：44 41 54 42 3A 03 10 00 20 00 30 00 0A"/>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="7. LOG: 文本日志（下位机 → 主机）" Style="{StaticResource OverviewSubTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#FFF3E0">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource OverviewMono}" Text="LOG: + 等级(0~4 或 ASCII '0'~'4') + UTF-8 消息 + LF"/>
+                        <TextBlock Style="{StaticResource OverviewMono}" Margin="0,4,0,0" Text="等级：0=DEBUG  1=INFO  2=WARN  3=ERROR  4=TRACE"/>
+                        <TextBlock Style="{StaticResource OverviewMono}" Margin="0,4,0,0" Text="示例：LOG:1system ready"/>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="四、命令对称关系（文本 / 二进制）" Style="{StaticResource OverviewSectionTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#FFF8E1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="SemiBold" Margin="0,0,8,6" Text="方向"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" Margin="0,0,8,6" Text="文本"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" FontWeight="SemiBold" Margin="0,0,0,6" Text="二进制"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,8,4" Text="主机 → 下位机"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontFamily="Consolas" FontSize="12.5" TextWrapping="Wrap" Margin="0,0,8,4"
+                                   Text="AT+ + 正文 + CRLF"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" FontFamily="Consolas" FontSize="12.5" TextWrapping="Wrap" Margin="0,0,0,4"
+                                   Text="CMD + len + opcode[+参数] + LF"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,8,0" Text="下位机 → 主机"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontFamily="Consolas" FontSize="12.5" TextWrapping="Wrap" Margin="0,0,8,0"
+                                   Text="OK / ERR / +URC 行 + LF"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" FontFamily="Consolas" FontSize="12.5" TextWrapping="Wrap"
+                                   Text="ACK + len + opcode + status + LF"/>
+                    </Grid>
+                </Border>
+
+                <TextBlock Text="五、接收解析顺序（助手内部）" Style="{StaticResource OverviewSectionTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#F5F5F5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="SemiBold" Margin="0,0,8,4" Text="顺序"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" Margin="0,0,8,4" Text="判断"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" FontWeight="SemiBold" Margin="0,0,0,4" Text="结果"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" FontSize="12.5" Margin="0,0,8,4" Text="1"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="12.5" Margin="0,0,8,4" Text="缓冲区以 DATB: 开头且帧完整"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" FontSize="12.5" Margin="0,0,0,4" Text="曲线"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" FontSize="12.5" Margin="0,0,8,4" Text="2"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="12.5" Margin="0,0,8,4" Text="缓冲区以 ACK 开头且帧完整"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" FontSize="12.5" Margin="0,0,0,4" Text="回传"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" FontSize="12.5" Margin="0,0,8,4" Text="3"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="12.5" Margin="0,0,8,4" Text="遇到 LF / CRLF 切出一行文本"/>
+                        <TextBlock Grid.Row="3" Grid.Column="2" FontSize="12.5" Margin="0,0,0,4" Text="行解析"/>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" FontSize="12.5" Margin="0,0,8,4" Text="4a"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" FontSize="12.5" Margin="0,0,8,4" Text="行以 DATA: 开头"/>
+                        <TextBlock Grid.Row="4" Grid.Column="2" FontSize="12.5" Margin="0,0,0,4" Text="曲线"/>
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" FontSize="12.5" Margin="0,0,8,4" Text="4b"/>
+                        <TextBlock Grid.Row="5" Grid.Column="1" FontSize="12.5" Margin="0,0,8,4" Text="行以 LOG: 开头"/>
+                        <TextBlock Grid.Row="5" Grid.Column="2" FontSize="12.5" Margin="0,0,0,4" Text="日志"/>
+
+                        <TextBlock Grid.Row="6" Grid.Column="0" FontSize="12.5" Margin="0,0,8,4" Text="4c"/>
+                        <TextBlock Grid.Row="6" Grid.Column="1" FontSize="12.5" Margin="0,0,8,4" Text="行符合 OK / ERR / +URC"/>
+                        <TextBlock Grid.Row="6" Grid.Column="2" FontSize="12.5" Margin="0,0,0,4" Text="回传"/>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" FontSize="12.5" Margin="0,0,8,0" Text="4d"/>
+                        <TextBlock Grid.Row="7" Grid.Column="1" FontSize="12.5" Margin="0,0,8,0" Text="行以 AT+ 开头（上行）或其它"/>
+                        <TextBlock Grid.Row="7" Grid.Column="2" FontSize="12.5" Text="AT-RX / RAW"/>
+                    </Grid>
+                </Border>
+
+                <TextBlock Text="六、联调示例（一条会话）" Style="{StaticResource OverviewSectionTitle}"/>
+                <Border Style="{StaticResource OverviewCaseBorder}" Background="#EFEBE9" Margin="0,0,0,14">
+                    <TextBlock Style="{StaticResource OverviewMono}">
+                        下位机 →  DATA:16384,16402,16390
+                        下位机 →  LOG:1IMU started
+                        主机   →  AT+GMR
+                        下位机 →  AT version:1.0.0（RAW）
+                        下位机 →  OK
+                        主机   →  CMD 43 4D 44 01 01 0A
+                        下位机 →  ACK 41 43 4B 02 01 00 0A
+                    </TextBlock>
+                </Border>
+
+                <TextBlock Style="{StaticResource OverviewBodyText}" Margin="0,0,0,8">
+                    完整 HEX 案例与界面操作说明见「帮助 → 使用说明」。已弃用 CMDS:、ACKS:、CMDB:、ACKB: 等旧前缀，助手不再解析。
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

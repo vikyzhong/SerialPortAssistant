@@ -1,0 +1,260 @@
+<Window x:Class="SerialPortAssistant.Views.SettingsWindow"
+
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+        Title="协议与日志配置"
+
+        Height="560"
+
+        Width="640"
+
+        WindowStartupLocation="CenterOwner">
+
+    <DockPanel Margin="12">
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+
+            <Button Content="恢复默认日志等级" Click="ResetLogLevels_Click" Padding="12,6" Margin="0,0,8,0"/>
+
+            <Button Content="保存" Click="Save_Click" Padding="16,6" Margin="0,0,8,0" IsDefault="True"/>
+
+            <Button Content="取消" IsCancel="True" Padding="16,6"/>
+
+        </StackPanel>
+
+
+
+        <TabControl>
+
+            <TabItem Header="字段前缀">
+
+                <Grid Margin="8">
+
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+
+                        <ColumnDefinition Width="100"/>
+
+                        <ColumnDefinition Width="*"/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="DATA" VerticalAlignment="Center" Margin="0,6"/>
+
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="DataPrefixBox" Margin="0,6"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="DATB" VerticalAlignment="Center" Margin="0,6"/>
+
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="DataBinaryPrefixBox" Margin="0,6"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="LOG" VerticalAlignment="Center" Margin="0,6"/>
+
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="LogPrefixBox" Margin="0,6"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="AT+" VerticalAlignment="Center" Margin="0,6"
+                               ToolTip="文本命令前缀（字符串发送），默认 AT+"/>
+
+                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="CmdPrefixBox" Margin="0,6"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="CMD" VerticalAlignment="Center" Margin="0,6"
+                               ToolTip="二进制命令前缀（3 字节，与 AT+ 等长），默认 CMD"/>
+
+                    <TextBox Grid.Row="4" Grid.Column="1" x:Name="CmdBinaryPrefixBox" Margin="0,6"/>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="ACK" VerticalAlignment="Center" Margin="0,6"
+                               ToolTip="二进制回传前缀（3 字节），默认 ACK"/>
+
+                    <TextBox Grid.Row="5" Grid.Column="1" x:Name="AckBinaryPrefixBox" Margin="0,6"/>
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="AT+ 行尾" VerticalAlignment="Center" Margin="0,6"
+                               ToolTip="仅 AT+ 文本命令发送时使用；DATA/LOG/CMD/ACK 仍为 LF"/>
+
+                    <ComboBox Grid.Row="6" Grid.Column="1" x:Name="AtLineEndingBox" Margin="0,6" MinWidth="120" HorizontalAlignment="Left"/>
+
+                    <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Foreground="#666"
+                               Margin="0,14,0,4" VerticalAlignment="Top"
+                               Text="命令判头：AT+ / CMD / ACK 均为 3 字节。AT+ 默认 CRLF（兼容标准 AT 行尾）；DATA/LOG/CMD/ACK 帧尾仍为 LF。文本回传 OK/ERR/+URC 无固定前缀。"/>
+
+                </Grid>
+
+            </TabItem>
+
+
+
+            <TabItem Header="数据通道">
+
+                <Grid Margin="12">
+
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="*"/>
+
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+
+                        <ColumnDefinition Width="100"/>
+
+                        <ColumnDefinition Width="*"/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="通道1" VerticalAlignment="Center" Margin="0,6"/>
+
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="Ch1NameBox" Margin="0,6"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="通道2" VerticalAlignment="Center" Margin="0,6"/>
+
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="Ch2NameBox" Margin="0,6"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="通道3" VerticalAlignment="Center" Margin="0,6"/>
+
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="Ch3NameBox" Margin="0,6"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Foreground="#666" Margin="0,12,0,0"
+
+                               Text="用于曲线图例，如加速度 X/Y/Z。"/>
+
+                </Grid>
+
+            </TabItem>
+
+
+
+            <TabItem Header="日志等级 (5级)">
+
+                <DockPanel Margin="4">
+
+                    <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="#666" Margin="0,0,0,8"
+
+                               Text="固定 5 个等级，字节 0~4。可在主界面勾选显示哪些等级；此处配置名称与颜色。"/>
+
+                    <DataGrid x:Name="LogLevelsGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+
+                              CanUserDeleteRows="False" HeadersVisibility="Column" SelectionMode="Single">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="字节" Binding="{Binding LevelId}" Width="50" IsReadOnly="True"/>
+
+                            <DataGridTextColumn Header="名称" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+
+                            <DataGridTextColumn Header="颜色(#RRGGBB)" Binding="{Binding Color, UpdateSourceTrigger=PropertyChanged}" Width="120"/>
+
+                            <DataGridCheckBoxColumn Header="默认显示" Binding="{Binding IsVisible, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </DockPanel>
+
+            </TabItem>
+
+
+
+            <TabItem Header="命令码">
+
+                <DockPanel Margin="4">
+
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,8,0,0">
+
+                        <Button Content="添加" Click="AddOpcode_Click" Padding="10,4" Margin="0,0,8,0"/>
+
+                        <Button Content="删除选中" Click="RemoveOpcode_Click" Padding="10,4" Margin="0,0,8,0"/>
+
+                        <Button Content="恢复默认" Click="ResetOpcodes_Click" Padding="10,4"/>
+
+                    </StackPanel>
+
+                    <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="#666" Margin="0,0,0,8"
+
+                               Text="命令码表为全集。Opcode、名称、文本别名须唯一；默认 payload 为 CMD 字节区（含 opcode）。"/>
+
+                    <DataGrid x:Name="OpcodesGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+
+                              HeadersVisibility="Column" SelectionMode="Single">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Opcode" Binding="{Binding OpcodeText, UpdateSourceTrigger=PropertyChanged}" Width="72"/>
+
+                            <DataGridTextColumn Header="名称" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+
+                            <DataGridTextColumn Header="文本别名" Binding="{Binding TextAlias, UpdateSourceTrigger=PropertyChanged}" Width="120"/>
+
+                            <DataGridTextColumn Header="默认 payload" Binding="{Binding DefaultPayloadHex, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </DockPanel>
+
+            </TabItem>
+
+
+
+            <TabItem Header="常用命令">
+
+                <DockPanel Margin="4">
+
+                    <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Foreground="#666" Margin="0,0,0,8"
+
+                               Text="勾选后出现在主界面快捷栏；仅引用命令码表，不单独存储报文。"/>
+
+                    <DataGrid x:Name="FavoritesGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+
+                              CanUserDeleteRows="False" HeadersVisibility="Column" SelectionMode="Single">
+
+                        <DataGrid.Columns>
+
+                            <DataGridCheckBoxColumn Header="快捷" Binding="{Binding IsFavorite, UpdateSourceTrigger=PropertyChanged}" Width="56"/>
+
+                            <DataGridTextColumn Header="Opcode" Binding="{Binding OpcodeHex}" Width="60" IsReadOnly="True"/>
+
+                            <DataGridTextColumn Header="名称" Binding="{Binding Name}" Width="120" IsReadOnly="True"/>
+
+                            <DataGridTextColumn Header="文本别名" Binding="{Binding TextAlias}" Width="*" IsReadOnly="True"/>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </DockPanel>
+
+            </TabItem>
+
+        </TabControl>
+
+    </DockPanel>
+
+</Window>
+
